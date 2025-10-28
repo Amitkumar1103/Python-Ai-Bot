@@ -7,6 +7,10 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+Scripts/
+Lib/
+Include/
+aiagent/
 .Python
 build/
 develop-eggs/
@@ -31,6 +35,8 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+*.bak
+*.png
 
 # Installer logs
 pip-log.txt
@@ -135,7 +141,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .envrc
 .venv
 env/
