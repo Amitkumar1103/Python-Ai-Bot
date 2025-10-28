@@ -1,0 +1,71 @@
+import os
+import json
+import time
+from google import genai as gen
+from dotenv import load_dotenv 
+
+
+load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
+client = gen.Client(api_key=api_key)
+print("API Key Loaded:", api_key is not None)
+
+
+def load_memory(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            data = json.load(f)
+            print(f"Memory loaded from {file_path}.")
+            return data
+    else:
+        print(f"Memory file {file_path} not found. Returning empty memory.")
+    return []
+
+
+def ask(contents):
+    try:
+        context = ""
+        for memory_item in memory:
+            context += f"{memory_item['role']}: {memory_item['content']}\n"
+        context += f"user: {contents}\n"
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=context
+        )
+        if contents.lower() in  ["exit","bye","quit"]:
+            print("Exiting the program.")
+            exit()
+
+        if contents.lower() in ["forget last message", "clear memory", "forget"]:
+            memory.pop()
+            memory.pop()
+            return "Last memory is cleared."
+        if contents.lower() in ["clear all memory", "forget all"]:
+            memory.clear()
+            return "All memory is cleared."
+        return response.text
+
+    except Exception as e:
+        print("Error occurred while generating content:", e)
+        return "Sorry, I couldn't generate a response."
+
+
+def save_memory(file_path, memory):
+    max_memory = 500
+    if len(memory) > max_memory:
+        memory = memory[-max_memory:]
+    with open(file_path, "w") as f:
+        json.dump(memory, f, indent=2)
+
+
+memory = load_memory("memory.json")
+
+# print(len(memory), "memory items loaded.")
+while True:
+    user_input = input("You: ")
+    reply = ask(user_input)
+    print("AI:", reply)
+    memory.append({"role": "user", "content": user_input})
+    memory.append({"role": "ai", "content": reply})
+    save_memory("memory.json", memory)
+
