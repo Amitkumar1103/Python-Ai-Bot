@@ -5,14 +5,18 @@ __pycache__/
 
 # C extensions
 *.so
+
+# Ignore the entire 'aiagent' directory and all its contents
+aiagent/
+
+# Ignore all files ending with the .bak extension anywhere in the repository
 *.bak
-*.png
+
+# Ignore the environment file (good practice if it holds secrets)
+
 
 # Distribution / packaging
-aiagent/
-Scripts/
-Lib/
-Include/
+
 
 .Python
 build/
