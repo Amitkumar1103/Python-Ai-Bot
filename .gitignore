@@ -5,12 +5,15 @@ __pycache__/
 
 # C extensions
 *.so
+*.bak
+*.png
 
 # Distribution / packaging
+aiagent/
 Scripts/
 Lib/
 Include/
-aiagent/
+
 .Python
 build/
 develop-eggs/
